@@ -1,0 +1,65 @@
+/* Global Styles */
+.header {
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #A2C2E8, #6D91B5); /* Soft blue gradient */
+    color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .display-5 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .lead {
+    font-size: 1.25rem;
+    color: white;
+  }
+  
+  .d-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .me-3 {
+    margin-right: 1rem;
+  }
+  
+  .rounded-circle {
+    border-radius: 50%;
+  }
+  
+  .border {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
+  }
+  
+  .navbar {
+    background-color: #343a40;
+  }
+  
+  .nav-link {
+    color: #ffffff;
+    font-size: 1rem;
+  }
+  
+  .nav-link:hover {
+    color: #e0e0e0;
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+  }
+  
+  .rounded {
+    border-radius: 0.25rem !important;
+  }
+  

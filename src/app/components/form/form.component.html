@@ -1,0 +1,145 @@
+<div>
+    <h4 class="mb-4">Billing Address</h4>
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+      <div class="row g-4">
+  
+        <div class="col-sm-6">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" formControlName="firstName" class="form-control form-control-lg" id="firstName" placeholder="First Name">
+          <div *ngIf="checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched" class="invalid-feedback">
+            Valid first name is required.
+          </div>
+        </div>
+  
+        <div class="col-sm-6">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" formControlName="lastName" class="form-control form-control-lg" id="lastName" placeholder="Last Name">
+          <div *ngIf="checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched" class="invalid-feedback">
+            Valid last name is required.
+          </div>
+        </div>
+  
+        <div class="col-12">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" formControlName="username" class="form-control form-control-lg" id="username" placeholder="Username">
+          <div *ngIf="checkoutForm.get('username')?.invalid && checkoutForm.get('username')?.touched" class="invalid-feedback">
+            Your username is required.
+          </div>
+        </div>
+  
+        <div class="col-12">
+          <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
+          <input type="email" formControlName="email" class="form-control form-control-lg" id="email" placeholder="you@example.com">
+          <div *ngIf="checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched" class="invalid-feedback">
+            Please enter a valid email address for shipping updates.
+          </div>
+        </div>
+  
+        <!-- Collapsible Saved Addresses Section -->
+        <div class="col-12">
+          <label for="address" class="form-label">Address</label>
+          <div class="address-content p-3 border mb-2 rounded" *ngIf="setSelectedAddress() !== undefined">
+            <p class="address-text">
+              {{ formatAddress(setSelectedAddress()) }}
+            </p>
+            <p class="address-country"><strong>Country:</strong> {{ setSelectedAddress()?.country }}</p>
+            <div class="address-button-list">
+              <button type="button" class="btn btn-edit btn-secondary" (click)="openAddressModal(setSelectedAddress(), true)">Edit Address</button>
+              <button type="button" class="btn btn-edit btn-danger" (click)="openConfirmasionModal(setSelectedAddress()!)">Delete Address</button>
+            </div>
+          </div>
+          <div *ngIf="savedAddresses.length > 0" class="address-box">
+            <a class="address-toggle-btn d-flex align-items-center" (click)="toggleAddressBox()">
+              <i [class]="'me-2 ' + (addressBoxOpen ? 'bi bi-chevron-up' : 'bi bi-chevron-down')"></i>
+              {{ addressBoxOpen ? 'Hide Addresses' : 'Show my Addresses'}}
+            </a>
+  
+            <div *ngIf="addressBoxOpen" class="address-list scrollable-addresses">
+              <label for="savedAddress" class="address-label">Saved Addresses:</label>
+  
+              <div *ngFor="let address of savedAddresses; let i = index" class="address-box-item" 
+                   [ngClass]="{'selected-address': selectedAddressId === address.id}" 
+                   (click)="selectAddress(address)">
+                <div class="address-content p-3 border mb-2 rounded">
+                  <p class="address-text">
+                    {{ formatAddress(address) }}
+                  </p>
+                  <p class="address-country"><strong>Country:</strong> {{ address?.country }}</p>
+                  <div class="address-button-list">
+                    <button type="button" class="btn btn-edit btn-secondary" (click)="openAddressModal(address, true)">Edit Address</button>
+                    <button type="button" class="btn btn-edit btn-danger" (click)="openConfirmasionModal(address)">Delete Address</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Add Address Button -->
+        <button class="btn btn-primary btn-lg" type="button" (click)="openAddressModal()">Add New Address</button>
+  
+      </div>
+  
+      <hr class="my-4">
+  
+      <h4 class="mb-3">Payment</h4>
+  
+      <div class="my-3">
+        <div class="form-check">
+          <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
+          <label class="form-check-label" for="credit">Credit card</label>
+        </div>
+        <div class="form-check">
+          <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+          <label class="form-check-label" for="debit">Debit card</label>
+        </div>
+        <div class="form-check">
+          <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+          <label class="form-check-label" for="paypal">PayPal</label>
+        </div>
+      </div>
+  
+      <div class="row gy-3">
+        <!-- Name on Card -->
+        <div class="col-md-6">
+          <label for="ccName" class="form-label">Name on Card</label>
+          <input type="text" formControlName="ccName" class="form-control form-control-lg" id="ccName" placeholder="Full name">
+          <small class="text-muted">Full name as displayed on card</small>
+          <div *ngIf="checkoutForm.get('ccName')?.invalid && checkoutForm.get('ccName')?.touched" class="invalid-feedback">
+            Name on card is required.
+          </div>
+        </div>
+
+        <!-- Credit Card Number -->
+        <div class="col-md-6">
+          <label for="ccNumber" class="form-label">Credit Card Number</label>
+          <input type="text" formControlName="ccNumber" class="form-control form-control-lg" id="ccNumber" placeholder="Card number">
+          <div *ngIf="checkoutForm.get('ccNumber')?.invalid && checkoutForm.get('ccNumber')?.touched" class="invalid-feedback">
+            Credit card number must be 16 digits.
+          </div>
+        </div>
+
+        <!-- Expiration Date -->
+        <div class="col-md-3">
+          <label for="ccExpiration" class="form-label">Expiration</label>
+          <input type="text" formControlName="ccExpiration" class="form-control form-control-lg" id="ccExpiration" placeholder="MM/YY">
+          <div *ngIf="checkoutForm.get('ccExpiration')?.invalid && checkoutForm.get('ccExpiration')?.touched" class="invalid-feedback">
+            Expiration date is required in MM/YY format.
+          </div>
+        </div>
+
+        <!-- CVV -->
+        <div class="col-md-3">
+          <label for="ccCVV" class="form-label">CVV</label>
+          <input type="text" formControlName="ccCVV" class="form-control form-control-lg" id="ccCVV" placeholder="CVV">
+          <div *ngIf="checkoutForm.get('ccCVV')?.invalid && checkoutForm.get('ccCVV')?.touched" class="invalid-feedback">
+            CVV must be 3 digits.
+          </div>
+        </div>
+      </div>  
+      <hr class="my-4">
+  
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to Checkout</button>
+    </form>
+  </div>
+  

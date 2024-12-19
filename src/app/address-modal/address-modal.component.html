@@ -1,0 +1,94 @@
+<div class="modal fade show" tabindex="-1" role="dialog" style="display: block;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEdit ? "Edit Address" : "Add New Address" }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="onClose()"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="addressForm" (ngSubmit)="onSaveAddress()">
+            <div class="mb-3">
+              <label for="addressLine1" class="form-label">Address Line 1</label>
+              <input
+                type="text"
+                id="addressLine1"
+                class="form-control"
+                formControlName="addressLine1"
+                [ngClass]="{'is-invalid': addressForm.get('addressLine1')?.invalid && addressForm.get('addressLine1')?.touched}"
+              />
+              <div *ngIf="addressForm.get('addressLine1')?.invalid && addressForm.get('addressLine1')?.touched" class="text-danger">
+                Address Line 1 is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="addressLine2" class="form-label">Address Line 2</label>
+              <input type="text" id="addressLine2" class="form-control" formControlName="addressLine2" />
+            </div>
+            <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <input
+                type="text"
+                id="city"
+                class="form-control"
+                formControlName="city"
+                [ngClass]="{'is-invalid': addressForm.get('city')?.invalid && addressForm.get('city')?.touched}"
+              />
+              <div *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched" class="text-danger">
+                City is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <select
+                class="form-select form-select-lg"
+                id="country"
+                formControlName="country"
+                required
+                (change)="onCountryChange($event)"
+                [ngClass]="{'is-invalid': addressForm.get('country')?.invalid && addressForm.get('country')?.touched}"
+              >
+                <option *ngFor="let country of uniqueCountries" [value]="country">{{ country }}</option>
+              </select>
+              <div *ngIf="addressForm.get('country')?.invalid && addressForm.get('country')?.touched" class="text-danger">
+                Please select a valid country.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="state" class="form-label">State</label>
+              <select
+                class="form-select form-select-lg"
+                id="state"
+                formControlName="state"
+                required
+                [ngClass]="{'is-invalid': addressForm.get('state')?.invalid && addressForm.get('state')?.touched}"
+              >
+                <option *ngFor="let state of uniqueStates" [value]="state">{{ state }}</option>
+              </select>
+              <div *ngIf="addressForm.get('state')?.invalid && addressForm.get('state')?.touched" class="text-danger">
+                Please provide a valid state.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="zipCode" class="form-label">Zip Code</label>
+              <input
+                type="text"
+                id="zipCode"
+                class="form-control"
+                formControlName="zipCode"
+                [ngClass]="{'is-invalid': addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched}"
+              />
+              <div *ngIf="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched" class="text-danger">
+                Zip Code is required and must be valid (e.g., 12345 or 12345-6789).
+              </div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-primary">
+                {{ isEdit ? "Save Changes" : "Save Address" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
