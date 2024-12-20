@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # עדכון לגרסה 3 של setup-node
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'  # הגדרת גרסה 18 או גרסה גבוהה יותר של Node.js
+          node-version: '18'  # גרסת Node.js
 
       - name: Install dependencies
         run: npm install
@@ -26,5 +26,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
+          token: ${{ secrets.PAT_TOKEN }}  # שימוש בטוקן אישי
           branch: gh-pages
           folder: dist/checkout-app
